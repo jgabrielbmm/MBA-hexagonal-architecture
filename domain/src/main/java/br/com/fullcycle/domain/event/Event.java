@@ -26,6 +26,7 @@ public class Event {
     private LocalDate date;
     private int totalSpots;
     private PartnerId partnerId;
+    private Boolean isCancelled = false;
 
     public Event(
             final EventId eventId,
@@ -116,6 +117,16 @@ public class Event {
         return Collections.unmodifiableSet(domainEvents);
     }
 
+    public Boolean isCancelled() { return isCancelled; }
+
+    public void cancel() {
+        if (Boolean.TRUE.equals(this.isCancelled)) {
+            throw new ValidationException("Event already cancelled");
+        }
+
+        setIsCancelled(true);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -159,5 +170,13 @@ public class Event {
         }
 
         this.totalSpots = totalSpots;
+    }
+
+    private void setIsCancelled(final Boolean value) {
+        if (value == null) {
+            throw new ValidationException("Invalid value for isCancelled");
+        }
+
+        this.isCancelled = value;
     }
 }
