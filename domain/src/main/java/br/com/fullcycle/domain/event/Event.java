@@ -26,7 +26,7 @@ public class Event {
     private LocalDate date;
     private int totalSpots;
     private PartnerId partnerId;
-    private Boolean isCancelled = false;
+    private EventStatus status;
 
     public Event(
             final EventId eventId,
@@ -34,13 +34,15 @@ public class Event {
             final String date,
             final Integer totalSpots,
             final PartnerId partnerId,
-            final Set<EventTicket> tickets
+            final Set<EventTicket> tickets,
+            final EventStatus status
     ) {
         this(eventId, tickets);
         this.setName(name);
         this.setDate(date);
         this.setTotalSpots(totalSpots);
         this.setPartnerId(partnerId);
+        this.setStatus(status);
     }
 
     private Event(final EventId eventId, final Set<EventTicket> tickets) {
@@ -54,7 +56,7 @@ public class Event {
     }
 
     public static Event newEvent(final String name, final String date, final Integer totalSpots, final Partner partner) {
-        return new Event(EventId.unique(), name, date, totalSpots, partner.partnerId(), null);
+        return new Event(EventId.unique(), name, date, totalSpots, partner.partnerId(), null, EventStatus.ACTIVE);
     }
 
     public static Event restore(
@@ -63,9 +65,10 @@ public class Event {
             final String date,
             final int totalSpots,
             final String partnerId,
-            final Set<EventTicket> tickets
+            final Set<EventTicket> tickets,
+            final EventStatus status
     ) {
-        return new Event(EventId.with(id), name, date, totalSpots, PartnerId.with(partnerId), tickets);
+        return new Event(EventId.with(id), name, date, totalSpots, PartnerId.with(partnerId), tickets, status);
     }
 
     public EventTicket reserveTicket(final CustomerId aCustomerId) {
@@ -117,14 +120,14 @@ public class Event {
         return Collections.unmodifiableSet(domainEvents);
     }
 
-    public Boolean isCancelled() { return isCancelled; }
+    public EventStatus status() { return status; }
 
     public void cancel() {
-        if (Boolean.TRUE.equals(this.isCancelled)) {
+        if (status.isCancelled()) {
             throw new ValidationException("Event already cancelled");
         }
 
-        setIsCancelled(true);
+        setStatus(EventStatus.CANCELLED);
     }
 
     @Override
@@ -172,11 +175,11 @@ public class Event {
         this.totalSpots = totalSpots;
     }
 
-    private void setIsCancelled(final Boolean value) {
-        if (value == null) {
+    private void setStatus(final EventStatus status) {
+        if (status == null) {
             throw new ValidationException("Invalid value for isCancelled");
         }
 
-        this.isCancelled = value;
+        this.status = status;
     }
 }
