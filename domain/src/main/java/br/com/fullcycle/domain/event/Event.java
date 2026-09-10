@@ -72,6 +72,10 @@ public class Event {
     }
 
     public EventTicket reserveTicket(final CustomerId aCustomerId) {
+        if (this.status.isCancelled()) {
+            throw new ValidationException("Cannot reserve a ticket for a canceled event");
+        }
+
         this.allTickets().stream()
                 .filter(it -> Objects.equals(it.customerId(), aCustomerId))
                 .findFirst()
@@ -128,6 +132,8 @@ public class Event {
         }
 
         setStatus(EventStatus.CANCELLED);
+
+        this.domainEvents.add(new EventCancelled(this.eventId));
     }
 
     @Override
