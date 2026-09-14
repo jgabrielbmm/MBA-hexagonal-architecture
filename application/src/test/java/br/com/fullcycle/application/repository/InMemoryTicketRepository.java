@@ -34,7 +34,9 @@ public class InMemoryTicketRepository implements TicketRepository {
 
     @Override
     public List<Ticket> ticketsByEventId(EventId eventId) {
-        return List.of();
+        return this.tickets.values().stream()
+                .filter(ticket -> Objects.equals(ticket.eventId(), eventId))
+                .toList();
     }
 
     @Override

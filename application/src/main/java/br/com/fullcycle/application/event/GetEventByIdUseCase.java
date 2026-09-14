@@ -21,7 +21,7 @@ public class GetEventByIdUseCase
         return eventRepository.eventOfId(EventId.with(input.id))
                 .map(event -> new Output(
                         event.eventId().value(),
-                        event.name().toString(),
+                        event.name().value(),
                         event.date().toString(),
                         event.totalSpots(),
                         event.status().toString()
@@ -31,6 +31,6 @@ public class GetEventByIdUseCase
     public record Input(String id) {
     }
 
-    public record Output(String id, String name, String date, Integer totalSpot, String status) {
+    public record Output(String id, String name, String date, Integer totalSpots, String status) {
     }
 }
