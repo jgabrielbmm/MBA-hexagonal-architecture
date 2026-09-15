@@ -1,9 +1,11 @@
 type Query {
+    eventOfId(id: ID!): Event
     customerOfId(id: ID!): Customer
     partnerOfId(id: ID!): Partner
 }
 
 type Mutation {
+    cancelEvent(id: ID!): CancelEventResult!
     createCustomer(input: CustomerInput): Customer!
     createEvent(input: EventInput): Event!
     createPartner(input: PartnerInput): Partner!
@@ -23,7 +25,13 @@ input CustomerInput {
     cpf: String
 }
 
+type CancelEventResult {
+    id: ID!
+    status: String!
+}
+
 type Event {
+    status: String
     id: ID!
     date: String!
     totalSpots: Int!
