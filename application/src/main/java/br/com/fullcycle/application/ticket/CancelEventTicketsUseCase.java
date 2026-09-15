@@ -5,7 +5,6 @@ import br.com.fullcycle.domain.event.EventId;
 import br.com.fullcycle.domain.event.ticket.Ticket;
 import br.com.fullcycle.domain.event.ticket.TicketRepository;
 
-import java.util.List;
 import java.util.Objects;
 
 public class CancelEventTicketsUseCase extends UseCase<CancelEventTicketsUseCase.Input, CancelEventTicketsUseCase.Output> {
@@ -25,10 +24,10 @@ public class CancelEventTicketsUseCase extends UseCase<CancelEventTicketsUseCase
             ticketRepository.update(ticket);
         }
 
-        return new Output(ticketList);
+        return new Output(ticketList.size());
     }
 
     public record Input(String eventId) { }
 
-    public record Output(List<Ticket> ticketList) { }
+    public record Output(Integer cancelledTickets) { }
 }
