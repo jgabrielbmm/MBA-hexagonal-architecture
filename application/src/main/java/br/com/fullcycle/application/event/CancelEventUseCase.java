@@ -31,5 +31,5 @@ public class CancelEventUseCase extends UseCase<CancelEventUseCase.Input, Cancel
 
     public record Input(String eventId) { }
 
-    public record Output(String eventId, String status) { }
+    public record Output(String id, String status) { }
 }
