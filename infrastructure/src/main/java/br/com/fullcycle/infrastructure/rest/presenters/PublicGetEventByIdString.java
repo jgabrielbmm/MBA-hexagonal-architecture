@@ -28,8 +28,8 @@ public class PublicGetEventByIdString implements Presenter<Optional<GetEventById
     }
 
     @Override
-    public String present(Throwable error) {
+    public ResponseEntity<?> present(Throwable error) {
         LOG.error("An error was observer at PublicGetEventByIdString", error);
-        return "not found";
+        return ResponseEntity.notFound().build();
     }
 }
